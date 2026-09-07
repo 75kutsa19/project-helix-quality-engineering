@@ -1,0 +1,781 @@
+{
+  "info": {
+    "_postman_id": "helix-phase3-fhir-api",
+    "name": "Project Helix - Phase 3 FHIR API Testing",
+    "description": "Reconstructed Phase 3 Postman workflow for synthetic HAPI FHIR R4 API testing. Includes chained resource creation, negative tests, and cleanup.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://hapi.fhir.org/baseR4"
+    },
+    {
+      "key": "testSuffix",
+      "value": ""
+    },
+    {
+      "key": "patientId",
+      "value": ""
+    },
+    {
+      "key": "practitionerId",
+      "value": ""
+    },
+    {
+      "key": "organizationId",
+      "value": ""
+    },
+    {
+      "key": "consentId",
+      "value": ""
+    },
+    {
+      "key": "serviceRequestId",
+      "value": ""
+    },
+    {
+      "key": "specimenId",
+      "value": ""
+    },
+    {
+      "key": "taskId",
+      "value": ""
+    },
+    {
+      "key": "diagnosticReportId",
+      "value": ""
+    },
+    {
+      "key": "auditEventId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "01 Create Patient",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Patient",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Patient"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Patient\",\n  \"identifier\": [\n    {\n      \"system\": \"https://project-helix.example/test\",\n      \"value\": \"HELIX-TEST-PATIENT-{{testSuffix}}\"\n    }\n  ],\n  \"name\": [\n    {\n      \"family\": \"Helix\",\n      \"given\": [\n        \"Synthetic\",\n        \"Patient\"\n      ]\n    }\n  ],\n  \"gender\": \"unknown\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": "pm.variables.set('testSuffix', Date.now().toString());"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is Patient', function(){pm.expect(pm.response.json().resourceType).to.eql('Patient');});",
+              "pm.test('Patient ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('patientId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Create Practitioner",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Practitioner",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Practitioner"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Practitioner\",\n  \"identifier\": [\n    {\n      \"system\": \"https://project-helix.example/test\",\n      \"value\": \"HELIX-TEST-PRACTITIONER-{{testSuffix}}\"\n    }\n  ],\n  \"name\": [\n    {\n      \"family\": \"Helix\",\n      \"given\": [\n        \"Synthetic\",\n        \"Practitioner\"\n      ]\n    }\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": "pm.variables.set('testSuffix', Date.now().toString());"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is Practitioner', function(){pm.expect(pm.response.json().resourceType).to.eql('Practitioner');});",
+              "pm.test('Practitioner ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('practitionerId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Create Organization",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Organization",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Organization"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Organization\",\n  \"identifier\": [\n    {\n      \"system\": \"https://project-helix.example/test\",\n      \"value\": \"HELIX-TEST-ORG-{{testSuffix}}\"\n    }\n  ],\n  \"name\": \"Helix Synthetic Genomics Organisation\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": "pm.variables.set('testSuffix', Date.now().toString());"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is Organization', function(){pm.expect(pm.response.json().resourceType).to.eql('Organization');});",
+              "pm.test('Organization ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('organizationId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Create Consent",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Consent",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Consent"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Consent\",\n  \"status\": \"active\",\n  \"scope\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/consentscope\",\n        \"code\": \"patient-privacy\"\n      }\n    ]\n  },\n  \"patient\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\"\n    }\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is Consent', function(){pm.expect(pm.response.json().resourceType).to.eql('Consent');});",
+              "pm.test('Consent patient reference is present', function(){pm.expect(pm.response.json().patient.reference).to.eql('Patient/'+pm.collectionVariables.get('patientId'));});",
+              "pm.test('Consent ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('consentId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Create ServiceRequest",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/ServiceRequest",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "ServiceRequest"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"ServiceRequest\",\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"requester\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\"\n  },\n  \"code\": {\n    \"text\": \"Synthetic genomic test\"\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is ServiceRequest', function(){pm.expect(pm.response.json().resourceType).to.eql('ServiceRequest');});",
+              "pm.test('Patient reference is correct', function(){pm.expect(pm.response.json().subject.reference).to.eql('Patient/'+pm.collectionVariables.get('patientId'));});",
+              "pm.test('ServiceRequest ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('serviceRequestId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Create Specimen linked to ServiceRequest",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Specimen",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Specimen"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Specimen\",\n  \"status\": \"available\",\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"request\": [\n    {\n      \"reference\": \"ServiceRequest/{{serviceRequestId}}\"\n    }\n  ],\n  \"type\": {\n    \"text\": \"Synthetic specimen\"\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is Specimen', function(){pm.expect(pm.response.json().resourceType).to.eql('Specimen');});",
+              "pm.test('ServiceRequest linkage is present', function(){pm.expect(pm.response.json().request[0].reference).to.eql('ServiceRequest/'+pm.collectionVariables.get('serviceRequestId'));});",
+              "pm.test('Specimen ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('specimenId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "07 Create Task",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Task",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Task"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Task\",\n  \"status\": \"requested\",\n  \"intent\": \"order\",\n  \"for\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"requester\": {\n    \"reference\": \"Practitioner/{{practitionerId}}\"\n  },\n  \"focus\": {\n    \"reference\": \"ServiceRequest/{{serviceRequestId}}\"\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is Task', function(){pm.expect(pm.response.json().resourceType).to.eql('Task');});",
+              "pm.test('Task focus references ServiceRequest', function(){pm.expect(pm.response.json().focus.reference).to.eql('ServiceRequest/'+pm.collectionVariables.get('serviceRequestId'));});",
+              "pm.test('Task ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('taskId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "08 Create DiagnosticReport",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/DiagnosticReport",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "DiagnosticReport"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"DiagnosticReport\",\n  \"status\": \"final\",\n  \"code\": {\n    \"text\": \"Synthetic diagnostic report\"\n  },\n  \"subject\": {\n    \"reference\": \"Patient/{{patientId}}\"\n  },\n  \"performer\": [\n    {\n      \"reference\": \"Practitioner/{{practitionerId}}\"\n    }\n  ],\n  \"basedOn\": [\n    {\n      \"reference\": \"ServiceRequest/{{serviceRequestId}}\"\n    }\n  ],\n  \"specimen\": [\n    {\n      \"reference\": \"Specimen/{{specimenId}}\"\n    }\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is DiagnosticReport', function(){pm.expect(pm.response.json().resourceType).to.eql('DiagnosticReport');});",
+              "pm.test('DiagnosticReport references specimen', function(){pm.expect(pm.response.json().specimen[0].reference).to.eql('Specimen/'+pm.collectionVariables.get('specimenId'));});",
+              "pm.test('DiagnosticReport ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('diagnosticReportId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "09 Create AuditEvent",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/AuditEvent",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "AuditEvent"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"AuditEvent\",\n  \"type\": {\n    \"system\": \"http://terminology.hl7.org/CodeSystem/audit-event-type\",\n    \"code\": \"rest\"\n  },\n  \"action\": \"C\",\n  \"recorded\": \"2026-01-01T00:00:00Z\",\n  \"outcome\": \"0\",\n  \"agent\": [\n    {\n      \"who\": {\n        \"reference\": \"Practitioner/{{practitionerId}}\"\n      }\n    }\n  ],\n  \"source\": {\n    \"observer\": {\n      \"reference\": \"Organization/{{organizationId}}\"\n    }\n  },\n  \"entity\": [\n    {\n      \"what\": {\n        \"reference\": \"Patient/{{patientId}}\"\n      }\n    },\n    {\n      \"what\": {\n        \"reference\": \"DiagnosticReport/{{diagnosticReportId}}\"\n      }\n    }\n  ]\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('resourceType is AuditEvent', function(){pm.expect(pm.response.json().resourceType).to.eql('AuditEvent');});",
+              "pm.test('Practitioner reference is present', function(){pm.expect(pm.response.json().agent[0].who.reference).to.eql('Practitioner/'+pm.collectionVariables.get('practitionerId'));});",
+              "pm.test('AuditEvent ID captured', function(){pm.expect(pm.response.json().id).to.exist; pm.collectionVariables.set('auditEventId',pm.response.json().id);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "12 Negative - Missing Patient reference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/ServiceRequest",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "ServiceRequest"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"ServiceRequest\",\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"subject\": {\n    \"reference\": \"Patient/missing-patient-{{testSuffix}}\"\n  },\n  \"code\": {\n    \"text\": \"Synthetic negative test\"\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": "pm.variables.set('testSuffix', Date.now().toString());"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created (HAPI accepts reference)', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('FHIR resourceType is ServiceRequest', function(){pm.expect(pm.response.json().resourceType).to.eql('ServiceRequest');});",
+              "pm.test('Response contains an ID', function(){pm.expect(pm.response.json().id).to.exist;});",
+              "pm.test('Observed behavior documented', function(){pm.expect(pm.response.code).to.eql(201);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "13 Negative - Missing Practitioner reference",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/AuditEvent",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "AuditEvent"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"AuditEvent\",\n  \"type\": {\n    \"system\": \"http://terminology.hl7.org/CodeSystem/audit-event-type\",\n    \"code\": \"rest\"\n  },\n  \"action\": \"C\",\n  \"recorded\": \"2026-01-01T00:00:00Z\",\n  \"outcome\": \"0\",\n  \"agent\": [\n    {\n      \"who\": {\n        \"reference\": \"Practitioner/missing-practitioner-{{testSuffix}}\"\n      }\n    }\n  ],\n  \"source\": {\n    \"observer\": {\n      \"reference\": \"Organization/{{organizationId}}\"\n    }\n  }\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": "pm.variables.set('testSuffix', Date.now().toString());"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status is 201 Created (HAPI accepts reference)', function(){pm.expect(pm.response.code).to.eql(201);});",
+              "pm.test('FHIR resourceType is AuditEvent', function(){pm.expect(pm.response.json().resourceType).to.eql('AuditEvent');});",
+              "pm.test('Response contains an ID', function(){pm.expect(pm.response.json().id).to.exist;});",
+              "pm.test('Observed behavior documented', function(){pm.expect(pm.response.code).to.eql(201);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.01 Cleanup DiagnosticReport",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/DiagnosticReport/{{diagnosticReportId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "DiagnosticReport",
+            "{{diagnosticReportId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.02 Cleanup Task",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Task/{{taskId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Task",
+            "{{taskId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.03 Cleanup Specimen",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Specimen/{{specimenId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Specimen",
+            "{{specimenId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.04 Cleanup ServiceRequest",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/ServiceRequest/{{serviceRequestId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "ServiceRequest",
+            "{{serviceRequestId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.05 Cleanup Consent",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Consent/{{consentId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Consent",
+            "{{consentId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.06 Cleanup Organization",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Organization/{{organizationId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Organization",
+            "{{organizationId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.07 Cleanup Practitioner",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Practitioner/{{practitionerId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Practitioner",
+            "{{practitionerId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "14.08 Cleanup Patient",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "https://hapi.fhir.org/baseR4/Patient/{{patientId}}",
+          "host": [
+            "hapi.fhir.org"
+          ],
+          "path": [
+            "Patient",
+            "{{patientId}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Cleanup status is 200 or 204', function(){pm.expect([200,204]).to.include(pm.response.code);});"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
