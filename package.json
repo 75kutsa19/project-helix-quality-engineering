@@ -1,0 +1,24 @@
+{
+  "name": "project-helix-quality-engineering",
+  "version": "1.0.0",
+  "description": "Quality Engineering programme for the GenomeBridge Clinical Systems Ltd simulation.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/75kutsa19/project-helix-quality-engineering.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/75kutsa19/project-helix-quality-engineering/issues"
+  },
+  "homepage": "https://github.com/75kutsa19/project-helix-quality-engineering#readme",
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "type": "module"
+}
