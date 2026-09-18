@@ -147,7 +147,7 @@ The Phase 5 implementation is on the branch:
 
 feature/phase-5-cypress-regression
 
-The Phase 5 pull request will be linked here after it is created.
+Phase 5 pull request: https://github.com/75kutsa19/project-helix-quality-engineering/pull/3
 
 ### 9. Conclusion
 
