@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/75kutsa19/project-helix-quality-engineering#readme",
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
     "cypress": "^16.0.0",
     "typescript": "^7.0.2"
   },

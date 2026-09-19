@@ -1,0 +1,11 @@
+{
+  "page": "Authenticated dashboard",
+  "url": "https://o3.openmrs.org/openmrs/index.htm",
+  "violations": [
+    {
+      "id": "meta-refresh",
+      "impact": "critical",
+      "description": "Ensure <meta http-equiv=\"refresh\"> is not used for delayed refresh"
+    }
+  ]
+}

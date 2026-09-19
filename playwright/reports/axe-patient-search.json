@@ -1,0 +1,11 @@
+{
+  "page": "Patient search route",
+  "url": "https://o3.openmrs.org/openmrs/coreapps/findpatient/findPatient.page",
+  "violations": [
+    {
+      "id": "meta-refresh",
+      "impact": "critical",
+      "description": "Ensure <meta http-equiv=\"refresh\"> is not used for delayed refresh"
+    }
+  ]
+}

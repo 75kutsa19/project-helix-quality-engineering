@@ -5,3 +5,7 @@
 
 cypress/screenshots/
 cypress/videos/
+
+# Playwright runtime artifacts
+test-results/
+playwright/reports/html/

@@ -1,0 +1,5 @@
+{
+  "browserName": "firefox",
+  "url": "https://o3.openmrs.org/openmrs/coreapps/findpatient/findPatient.page",
+  "classification": "environmental limitation - Cloudflare security verification"
+}
