@@ -1,0 +1,43 @@
+name: Phase 7 - Scheduled Quality
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scheduled-quality:
+    name: Scheduled local performance checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Start local referral mock
+        run: node performance/mock/referral-mock.mjs > mock.log 2>&1 &
+
+      - name: Wait for local mock
+        run: |
+          for i in {1..10}; do
+            curl --fail --silent http://127.0.0.1:3007/health && exit 0
+            sleep 1
+          done
+          cat mock.log
+          exit 1
+
+      - name: Run baseline performance scenario
+        env:
+          SCENARIO: baseline
+        run: k6 run performance/k6/referral-performance.js
+
+      - name: Run expected-load performance scenario
+        env:
+          SCENARIO: expected
+        run: k6 run performance/k6/referral-performance.js

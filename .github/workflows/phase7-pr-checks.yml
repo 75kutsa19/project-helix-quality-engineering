@@ -1,0 +1,37 @@
+name: Phase 7 - PR Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  fast-feedback:
+    name: Fast non-destructive checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Discover Playwright tests
+        run: npx playwright test --list
+
+      - name: Confirm Phase 7 local performance assets
+        run: |
+          test -f performance/mock/referral-mock.mjs
+          test -f performance/mock/referral-mock.test.mjs
+          test -f performance/k6/referral-performance.js
+          test -f performance/reports/phase7-performance-results.md
