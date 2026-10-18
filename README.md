@@ -9,8 +9,11 @@ The project demonstrates practical experience in software quality assurance, API
 The programme was successfully completed across all eight phases, with practical testing activities, technical implementations and supporting quality engineering evidence.
 
 **Project Type:** Professional Quality Engineering Simulation
+
 **Role:** Quality Engineer
+
 **Status:** Completed – All 8 Phases
+
 **Environment:** Simulated Healthcare Technology System
 
 ## Technologies and Tools
